@@ -54,7 +54,7 @@ class Surface extends JPanel {
         
         // read in file
         try {
-            FileReader fr = new FileReader("C:\\Users\\Charles\\Documents\\NetBeansProjects\\Militarium\\src\\militarium\\fischer_spassky_game3.txt");            
+            FileReader fr = new FileReader("C:\\Users\\Charles\\Documents\\NetBeansProjects\\Militarium\\src\\militarium\\beliavsky_nunn_1985.txt");            
             BufferedReader br = new BufferedReader(fr);
             pieceMap = new HashMap();
             row = 8;

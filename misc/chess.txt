@@ -1,0 +1,52 @@
+    public static void main(String[] args) throws IOException {
+        /*String path = "C:\\Users\\Charles\\Documents\\NetBeansProjects\\Militarium\\src\\militarium\\media\\chessboard.jpg";
+        File file = new File(path);
+        BufferedImage image = ImageIO.read(file);
+        JLabel label = new JLabel(new ImageIcon(image));
+        JFrame f = new JFrame();
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //f.getContentPane().add(label);
+        f.pack();
+        f.setLocation(200,200);
+        f.setVisible(true);*/
+        readIn();
+    }
+    
+class Surface extends JPanel {
+
+    private void doDrawing(Graphics g) {
+
+        Graphics2D g2d = (Graphics2D) g;
+
+        g2d.setColor(Color.blue);
+
+        Dimension size = getSize();
+        Insets insets = getInsets();
+
+        int w = size.width - insets.left - insets.right;
+        int h = size.height - insets.top - insets.bottom;
+
+        Random r = new Random();
+
+        for (int i = 0; i < 1000; i++) {
+
+            int x = Math.abs(r.nextInt()) % w;
+            int y = Math.abs(r.nextInt()) % h;
+            g2d.drawLine(x, y, x, y);
+        }
+    }
+}
+    
+    public static void readIn() throws IOException {        
+        try {
+            FileReader fr = new FileReader("C:\\Users\\Charles\\Documents\\NetBeansProjects\\Militarium\\src\\militarium\\fischer_spassky_game3.txt");            
+            BufferedReader br = new BufferedReader(fr);
+            
+            for (String line; (line = br.readLine()) != null;) {
+                System.out.println(line);
+            }
+            
+        } catch(IOException e){
+            System.out.println("Could not load file");
+        }    
+    }
