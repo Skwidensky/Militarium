@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,7 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.input.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -44,7 +44,7 @@ class Surface extends JPanel {
                 
         int squareSize = 64;
         
-        // populate squares
+        // draw the board
         for (int i=0; i<64; i+=2) {
             g.setColor(Color.WHITE);
             g.fillRect((i%8 + (i/8)%2) * squareSize, (i/8)*squareSize, squareSize, squareSize);
@@ -54,20 +54,26 @@ class Surface extends JPanel {
         
         // read in file
         try {
-            FileReader fr = new FileReader("C:\\Users\\Charles\\Documents\\NetBeansProjects\\Militarium\\src\\militarium\\beliavsky_nunn_1985.txt");            
+            FileReader fr = new FileReader("C:\\Users\\Charles\\Documents\\NetBeansProjects\\Militarium\\src\\militarium\\fischer_spassky_game3.txt");            
             BufferedReader br = new BufferedReader(fr);
+            //ArrayList[] String capPoints = new ArrayList[];
             pieceMap = new HashMap();
             row = 8;
             column = "a";
+            int turn = 0;
+            int shift = 0; // constant to shift lines to give more depth
             int x = 32; // upper-right first piece x
             int y = 32; // upper-right first piece y
             int r = 0; // color gradient
             int gee = 0;
             int b = 255;
+            int r2 = 255;
+            int b2 = 0;
             
+            // setting piece characteristics
             for (int j=1; j<33; j++) {
                 Piece p = new Piece();
-                
+                // type
                 if (row==8 || row==1) {
                     switch (column) {
                         case "a":
@@ -92,7 +98,7 @@ class Surface extends JPanel {
                 } else {
                     p.setType("P");
                 }
-                
+                // setting position of pieces
                 xy = column.concat(String.valueOf(row));
                 p.setName(xy);
                 
@@ -102,7 +108,7 @@ class Surface extends JPanel {
                 
                 p.setTruePos1(x);
                 p.setTruePos2(y);
-                x = x + 64;
+                x = x + 64; // increment board position for piece placement
                 
                 if (j == 8) {
                     x = 32;
@@ -122,15 +128,18 @@ class Surface extends JPanel {
                 }
                 
                 pieceMap.put(p.getName(), p);
-            }
+            } // end for-loop
             
+            // prints all of the pieces and their relative position on the board...
+            // in no specific order, mind you
             for(Map.Entry<String, Piece> entry : pieceMap.entrySet()){
                 System.out.println("Key : " + entry.getValue().getType() + entry.getKey() + " Value : " + 
                         entry.getValue().getTruePos1() + " " + entry.getValue().getTruePos2());
             }
             
+            // loop for reading in the chess match
             for (String line; (line = br.readLine()) != null;) {
-                int x1, y1, x2, y2, factor;          
+                int x1, y1, x2, y2;
       
                 if (line.charAt(0)=='a') {
                     x1 = 32;                        
@@ -204,17 +213,41 @@ class Surface extends JPanel {
                     y2 = 480;
                 }
                 
+                // if there was a capture
                 try {
                     if (line.charAt(4)=='x') {
-                        g2d.drawOval(x2, y2, 32, 32);
+                        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                RenderingHints.VALUE_ANTIALIAS_ON);
+                        g2d.drawOval(x2-32+shift, y2-16, 38, 38);
+                        shift += 2;
                     }
                 } catch (Exception e) {
                     
                 }
-                g.setColor(new Color(r,gee,b));
-                g2d.drawLine(x1, y1, x2, y2);
-                //System.out.println(line);
-                gee += 2;
+                
+                // compensates for castling's mucking up of the turn rotation
+                if (turn == 0){
+                    g.setColor(new Color(r,gee,b));
+                    g2d.drawLine(x1, y1, x2, y2);
+                    try {
+                        if (!line.endsWith("O")) {
+                            turn++;     
+                        }
+                    } catch (Exception e) {
+                        
+                    }
+                } else {
+                    g.setColor(new Color(r2,gee,b2));
+                    g2d.drawLine(x1, y1, x2, y2); 
+                    try {
+                        if (!line.endsWith("O")) {
+                            turn--;
+                        }
+                    } catch (Exception e) {
+                        
+                    }
+                }
+                gee += 2; // increment color gradient
             }
         } catch(IOException e){
             System.out.println("Could not load file");
@@ -233,7 +266,7 @@ class Surface extends JPanel {
     }
 }
 
-/************************************************/
+/**************************Frame**************************/
 
 public class Militarium extends JFrame {
 

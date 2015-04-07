@@ -15,9 +15,9 @@ b8d7
 e2e4
 f8g7 
 f1e2
-e8g8
+e8g8O
 h8f8
-e1g1
+e1g1O
 h1f1
 f8e8 
 d1c2

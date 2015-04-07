@@ -7,7 +7,7 @@ f8g7
 e2e4
 d7d6
 f2f3
-e8g8
+e8g8O
 h8f8
 c1e3
 b8d7
@@ -46,7 +46,7 @@ d2c4x
 c2f2
 c4e3
 d1e2
-h4c2
+f2c2
 g2f3
 a8f8
 h1g1
