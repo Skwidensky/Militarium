@@ -54,7 +54,7 @@ class Surface extends JPanel {
         
         // read in file
         try {
-            FileReader fr = new FileReader("C:\\Users\\Charles\\Documents\\NetBeansProjects\\Militarium\\src\\militarium\\fischer_spassky_game3.txt");            
+            FileReader fr = new FileReader("src/militarium/fischer_spassky_game3.txt");            
             BufferedReader br = new BufferedReader(fr);
             //ArrayList[] String capPoints = new ArrayList[];
             pieceMap = new HashMap();
@@ -219,7 +219,11 @@ class Surface extends JPanel {
                         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                 RenderingHints.VALUE_ANTIALIAS_ON);
                         g2d.drawOval(x2-32+shift, y2-16, 38, 38);
-                        shift += 2;
+                        if (shift == 16) {
+                            shift = 0;
+                        } else {
+                            shift += 2;
+                        }                        
                     }
                 } catch (Exception e) {
                     
